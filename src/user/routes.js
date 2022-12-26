@@ -1,7 +1,7 @@
 const {Router} = require("express");
 const controller = require("./controller");
 const router = Router();
-//Routes
+//Routes ss
 router.get("/", controller.getUsers);
 router.post("/", controller.addUser);
 router.get("/:person_key", controller.getUserById);
