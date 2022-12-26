@@ -115,10 +115,9 @@ const addUser = (req, res) => {
 const deleteUserById = (req, res) => {
   const person_key = req.params.person_key;
   pool.query(queries.deleteUser, [person_key], (error, result) => {
-    try {
-      if (error) throw error;
-      res.status(200).json(result.rows);
-    } catch (e) {}
+    if (!result.rows.length) {
+      res.send(`Person Key ${person_key} not found.`);
+    }
   });
 
   pool.query(queries.deleteUserAdress, [person_key], (error, result) => {
@@ -132,6 +131,7 @@ const deleteUserById = (req, res) => {
     try {
       if (error) throw error;
       res.status(200).json(result.rows);
+      res.send(`Person Key ${person_key} successuflly deleted.`);
     } catch (e) {}
   });
 };
