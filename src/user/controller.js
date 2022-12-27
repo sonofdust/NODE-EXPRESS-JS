@@ -114,26 +114,54 @@ const addUser = (req, res) => {
 
 const deleteUserById = (req, res) => {
   const person_key = req.params.person_key;
-  pool.query(queries.deleteUser, [person_key], (error, result) => {
+
+  const removeAddress = () => {
+    pool.query(queries.deleteAdress, (error, result) => {
+      try {
+        if (error) throw error;
+        //      res.status(200).json(result.rows);
+        res.send(`Person Key ${person_key} successuflly deleted.`);
+      } catch (e) {
+        res.send(`Failed to delete ${person_key} in address_tbl.`);
+      }
+    });
+  };
+
+  const removeUser = () => {
+    pool.query(queries.deleteUser, [person_key], (error, result) => {
+      try {
+        if (error) throw error;
+        removeAddress();
+      } catch (e) {
+        res.send(e);
+        res.send(`Failed to delete ${person_key} in users_tbl.`);
+      }
+    });
+  };
+
+  const removeUserAddress = () => {
+    pool.query(queries.deleteUserAdress, [person_key], (error, result) => {
+      try {
+        if (error) throw error;
+        removeUser();
+        //     res.status(200).json(result.rows);
+      } catch (e) {
+        res.send(`Failed to delete ${person_key} in address_user_tbl.`);
+      }
+    });
+  };
+
+  //***************************************************************************
+  //***************************************************************************
+  pool.query(queries.getUserById, [person_key], (error, result) => {
     if (!result.rows.length) {
       res.send(`Person Key ${person_key} not found.`);
+    } else {
+      removeUserAddress();
     }
   });
-
-  pool.query(queries.deleteUserAdress, [person_key], (error, result) => {
-    try {
-      if (error) throw error;
-      res.status(200).json(result.rows);
-    } catch (e) {}
-  });
-
-  pool.query(queries.deleteAdress, (error, result) => {
-    try {
-      if (error) throw error;
-      res.status(200).json(result.rows);
-      res.send(`Person Key ${person_key} successuflly deleted.`);
-    } catch (e) {}
-  });
+  //***************************************************************************
+  //***************************************************************************
 };
 
 module.exports = {getUsers, getUserById, addUser, deleteUserById};
