@@ -78,6 +78,9 @@ const deleteAdress = `DELETE FROM address_tbl WHERE address_key IN (
 SELECT a.address_key FROM address_tbl a LEFT JOIN users_address_tbl ua ON a.address_key = ua.address_key 
 WHERE ua.address_key ISNULL)`;
 
+const updateUser = `UPDATE users_tbl SET first_name = $1, middle_name = $2, last_name = $3 WHERE person_key = $4`;
+const updateUserAddress = `UPDATE users_address_tbl SET address_key = $1 WHERE person_key = $2`;
+
 module.exports = {
   getUsers,
   getUserById,
@@ -88,4 +91,6 @@ module.exports = {
   deleteUserAdress,
   deleteUser,
   deleteAdress,
+  updateUser,
+  updateUserAddress,
 };

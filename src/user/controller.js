@@ -163,5 +163,20 @@ const deleteUserById = (req, res) => {
   //***************************************************************************
   //***************************************************************************
 };
-
-module.exports = {getUsers, getUserById, addUser, deleteUserById};
+const updateUser = (req, res) => {
+  const person_key = req.params.id;
+  const {
+    first_name,
+    middle_name,
+    last_name,
+    sex,
+    birth_date,
+    personal_email,
+    home_phone,
+    street,
+    city,
+    state,
+    zip,
+  } = req.body;
+};
+module.exports = {getUsers, getUserById, addUser, deleteUserById, updateUser};
